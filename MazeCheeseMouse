@@ -1,0 +1,109 @@
+import java.util.Scanner;
+
+public class Map {
+
+	public char[][] map = { { '1', '0', '1', '0', '1', '1', '1', '1' }, { '1', '0', '1', '0', '1', '1', '0', '1' },
+			{ '1', '0', '0', '1', '0', '0', '1', '1' }, { '1', '0', '0', '0', '1', '1', '0', '1' },
+			{ '1', '0', '1', '0', '0', '0', '1', '1' }, { '1', '0', '0', '0', '1', '0', '0', '1' },
+			{ '1', '1', '1', '0', '0', '1', '0', '1' }, { '1', '1', '0', '1', '0', '1', '0', '1' } };
+
+	// show maze method
+	public void printMap() {
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++)
+				System.out.print(map[i][j] + "  ");
+
+			System.out.println();
+		}
+	}
+
+	// find path and show path method
+	public void findPath(int mi, int mj) {
+		if (walk(mi, mj) == true) {
+			map[mi][mj] = 'm';
+
+			System.out.println("One possible path is:");
+			printMap();
+
+		} else
+			System.out.println("No possible paths, sorry!");
+	}
+
+	// check status of cell and whether the move is possible
+	// mark position ('*' correct path / 'X' verified cell)
+	public boolean walk(int mi, int mj) {
+		if (map[mi][mj] == 'c')
+			return true;
+
+		if ((map[mi][mj] == '1') || (map[mi][mj] == '*'))
+			return false;
+
+		map[mi][mj] = '*';
+		
+		if (mj < 7) 
+		if (walk(mi, mj + 1) == true)
+			return true;
+
+		if (mi > 0)
+		if (walk(mi - 1, mj) == true)
+			return true;
+		
+		if (mj > 0)
+		if (walk(mi, mj - 1) == true)
+			return true;
+		
+		if (mi < 7)
+		if (walk(mi + 1, mj) == true)
+			return true;
+
+		map[mi][mj] = 'X';
+
+		return false;
+
+	}
+
+	public static void main(String[] args) {
+
+		int ans = 1;
+
+		// input mouse and cheese position
+
+		while (ans != 0) {
+
+			Map matrice = new Map();
+
+			System.out.println("Mouse coordinates please:");
+			Scanner mousex = new Scanner(System.in);
+			int mx1 = mousex.nextInt();
+
+			Scanner mousey = new Scanner(System.in);
+			int my1 = mousey.nextInt();
+
+			System.out.println("Cheese coordinates please:");
+			Scanner cheesex = new Scanner(System.in);
+			int cx1 = cheesex.nextInt();
+
+			Scanner cheesey = new Scanner(System.in);
+			int cy1 = cheesey.nextInt();
+
+			matrice.map[mx1][my1] = 'm';
+
+			matrice.map[cx1][cy1] = 'c';
+
+			System.out.println("Your maze looks like this:");
+			matrice.printMap();
+
+			matrice.findPath(mx1, my1);
+
+			System.out.println("Try new coordinates? 0/1");
+			Scanner answer = new Scanner(System.in);
+			ans = answer.nextInt();
+
+			if (ans == 0)
+				System.out.println("Bye bye, see you next time!");
+
+		}
+
+	}
+
+}
